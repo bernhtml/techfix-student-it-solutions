@@ -20,4 +20,4 @@ This project provides an IT support and ticketing platform for students, enablin
 ## 🚀 Getting Started
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/bernhtml/techfix-student-it-solutions.git](https://github.com/bernhtml/techfix-student-it-solutions.git)
+   git clone https://github.com/bernhtml/techfix-student-it-solutions.git
