@@ -8,8 +8,8 @@ This project provides an IT support and ticketing platform for students, enablin
 ## 👥 Project Team
 * **Member 1:** Genobiagon, Bernard - Lead Developer
 * **Member 2:** Balistoy, Huel - Frontend Specialist
-* **Member 3:** Econar, Sean D - Backend Specialist
-* **Member 4:** Base, Arjohn B - UI/UX Designer
+* **Member 3:** Econar, Sean - Backend Specialist
+* **Member 4:** Base, Arjohn - UI/UX Designer
 * **Member 5:** Jaron, Clint - Asset Verification & Project Documentation
 
 ## 📁 Key Files & Assets
@@ -20,4 +20,4 @@ This project provides an IT support and ticketing platform for students, enablin
 ## 🚀 Getting Started
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/bernhtml/techfix-student-it-solutions.git](https://github.com/bernhtml/techfix-student-it-solutions.git)
+  git clone https://github.com/bernhtml/techfix-student-it-solutions.git
