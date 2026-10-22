@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFix Student IT Solutions | Cebu Eastern College</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-ticket, #printable-ticket * {
+                visibility: visible;
+            }
+            #printable-ticket {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="switchTab('home')">
+                <span class="text-2xl font-black bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">TechFix</span>
+                <span class="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full font-semibold border border-blue-500/30">CEC Campus IT</span>
+                
+            </div>
+            
+            <nav class="flex space-x-2 md:space-x-4 text-xs md:text-sm font-medium">
+                <button onclick="switchTab('home')" id="nav-home" class="px-3 py-2 rounded-lg transition text-blue-400 bg-slate-800">Home & Services</button>
+                <button onclick="switchTab('booking')" id="nav-booking" class="px-3 py-2 rounded-lg transition text-slate-400 hover:text-slate-200">Book Service</button>
+                <button onclick="switchTab('ticket')" id="nav-ticket" class="px-3 py-2 rounded-lg transition text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+                    <span>Service Ticket</span>
+                    <span id="ticket-badge" class="hidden w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+
+        <div id="tab-home" class="space-y-16 py-10">
+            <section class="max-w-5xl mx-auto px-4 text-center relative">
+                <div class="absolute inset-0 -z-10 flex items-center justify-center opacity-10">
+                    <div class="w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
+                    <div class="w-96 h-96 bg-green-500 rounded-full blur-3xl"></div>
+                </div>
+                <span class="text-xs uppercase tracking-widest px-3 py-1 bg-slate-900 text-green-400 rounded-full font-bold border border-slate-800">Fast • Affordable • On-Campus</span>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mt-6 mb-4">
+                    Empowered Student <span class="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">IT Support</span>
+                </h1>
+                <p class="text-slate-400 text-base md:text-lg max-w-2xl mx-auto mb-8">
+                    Specialized laptop maintenance, thermal repasting, and developer environment setups (Flutter, Android Studio, Java) right inside Cebu Eastern College.
+                </p>
+                <div class="flex justify-center gap-4">
+                    <button onclick="switchTab('booking')" class="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-500 hover:to-green-500 text-white font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-blue-900/30">
+                        Book a Service Now
+                    </button>
+                    <a href="#about" class="bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold px-6 py-3 rounded-xl border border-slate-800 transition flex items-center">
+                        Learn More
+                    </a>
+                </div>
+            </section>
+
+            <section class="max-w-6xl mx-auto px-4 border-t border-slate-900 pt-12">
+                <div class="text-center mb-10">
+                    <h2 class="text-2xl md:text-3xl font-bold">Flagship Campus Services</h2>
+                    <p class="text-slate-400 text-sm mt-1">Solving thermal throttling, software bottlenecks, and developer setup failures.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl hover:border-slate-700 transition flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center font-bold text-xl mb-4 border border-blue-500/20">❄️</div>
+                            <h3 class="font-bold text-lg mb-2">Thermal Repasting & Cleaning</h3>
+                            <p class="text-slate-400 text-sm mb-4">Eliminate thermal throttling, loud fan noise, and unexpected thermal shutdowns using high-conductivity paste.</p>
+                        </div>
+                        <div class="flex justify-between items-center pt-4 border-t border-slate-800/80">
+                            <span class="text-green-400 font-bold">PHP 500.00</span>
+                            <button onclick="selectServiceAndBook('500', 'Laptop Thermal Maintenance Package')" class="text-xs bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white px-3 py-1.5 rounded-lg transition">Select</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl hover:border-slate-700 transition flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-green-500/10 text-green-400 rounded-xl flex items-center justify-center font-bold text-xl mb-4 border border-green-500/20">💻</div>
+                            <h3 class="font-bold text-lg mb-2">System Tune-Up & OS Setup</h3>
+                            <p class="text-slate-400 text-sm mb-4">Debloat Windows OS, fix boot delays, clean build cache lockups, and optimize background CPU usage.</p>
+                        </div>
+                        <div class="flex justify-between items-center pt-4 border-t border-slate-800/80">
+                            <span class="text-green-400 font-bold">PHP 300.00</span>
+                            <button onclick="selectServiceAndBook('300', 'System Tune-Up & OS Optimization')" class="text-xs bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white px-3 py-1.5 rounded-lg transition">Select</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl hover:border-slate-700 transition flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center font-bold text-xl mb-4 border border-purple-500/20">⚡</div>
+                            <h3 class="font-bold text-lg mb-2">Developer Environment Config</h3>
+                            <p class="text-slate-400 text-sm mb-4">Expert setup & troubleshooting for Flutter SDK, Android Studio Gradle sync errors, Java paths, and Hive DB.</p>
+                        </div>
+                        <div class="flex justify-between items-center pt-4 border-t border-slate-800/80">
+                            <span class="text-green-400 font-bold">PHP 450.00</span>
+                            <button onclick="selectServiceAndBook('450', 'Developer Environment Setup')" class="text-xs bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white px-3 py-1.5 rounded-lg transition">Select</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="max-w-6xl mx-auto px-4 border-t border-slate-900 pt-12">
+                <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-xl">
+                    <div class="max-w-3xl mx-auto text-center mb-10">
+                        <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">About TechFix Solutions</span>
+                        <h2 class="text-3xl font-extrabold mt-2 mb-4">Built By Students, For Students</h2>
+                        <p class="text-slate-300 text-base leading-relaxed">
+                            TechFix Student IT Solutions is a campus-based IT maintenance enterprise founded to eliminate computing bottlenecks faced by undergraduate students at <strong>Cebu Eastern College, Inc.</strong>Operating under a peer-to-peer model, we deliver fast, expert diagnostics right where students study.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-slate-950/60 border border-slate-800/80 p-6 rounded-2xl">
+                            <h3 class="font-bold text-blue-400 mb-2">🎓 Academic Roots</h3>
+                            <p class="text-slate-400 text-sm">Founded under the College of Information Technology (BSIT Program) to bridge the gap between commercial mall repair shops and student needs</p>
+                        </div>
+                        <div class="bg-slate-950/60 border border-slate-800/80 p-6 rounded-2xl">
+                            <h3 class="font-bold text-green-400 mb-2">⚙️ Developer Specialization</h3>
+                            <p class="text-slate-400 text-sm">We specialize in debugging software development tools including Flutter SDK, Android Studio Gradle dependencies, and Java system paths.</p>
+                        </div>
+                        <div class="bg-slate-950/60 border border-slate-800/80 p-6 rounded-2xl">
+                            <h3 class="font-bold text-purple-400 mb-2">💸 Same-Day Turnaround</h3>
+                            <p class="text-slate-400 text-sm">Operating on-campus allows us to guarantee same-day turnaround at up to 40% lower costs than external repair shops.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="tab-booking" class="hidden py-10">
+            <section class="max-w-4xl mx-auto px-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-10 shadow-2xl">
+                    <div class="text-center mb-8">
+                        <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Interactive Service Booking</span>
+                        <h2 class="text-2xl md:text-3xl font-extrabold mt-1">Book Your Repair & Get Ticket</h2>
+                        <p class="text-slate-400 text-sm mt-1">Provide your student details below to reserve your service slot and generate your Service Ticket.</p>
+                    </div>
+
+                    <form id="booking-form" onsubmit="handleBookingSubmit(event)" class="grid md:grid-cols-2 gap-8 items-start">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Full Name <span class="text-red-400">*</span></label>
+                                <input type="text" id="client-name" required placeholder="e.g., Bernard Genobiagon" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Course & Year Level <span class="text-red-400">*</span></label>
+                                <input type="text" id="client-course" required placeholder="e.g., BSIT 2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Contact / Messenger Link <span class="text-red-400">*</span></label>
+                                <input type="text" id="client-contact" required placeholder="e.g., 09123456789 or FB profile" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Select Service Package <span class="text-red-400">*</span></label>
+                                <select id="service-select" onchange="calculateTotal()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+                                    <option value="300" data-name="System Tune-Up & OS Optimization">System Tune-Up & OS Optimization (PHP 300.00)</option>
+                                    <option value="500" data-name="Laptop Thermal Maintenance Package">Laptop Thermal Maintenance Package (PHP 500.00)</option>
+                                    <option value="450" data-name="Developer Environment Setup">Developer Environment Setup (PHP 450.00)</option>
+                                    <option value="800" data-name="Combo: Thermal + Dev Setup">Combo: Thermal + Dev Setup (PHP 800.00)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Urgency Schedule</label>
+                                <select id="urgency-select" onchange="calculateTotal()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+                                    <option value="0" data-name="Standard Schedule (Same Day)">Standard Schedule (Same Day)</option>
+                                    <option value="150" data-name="Midterm / Final Priority (+PHP 150)">Midterm / Final Priority (+PHP 150)</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-500 hover:to-green-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-900/30 cursor-pointer flex items-center justify-center gap-2">
+                                <span>Confirm Booking & Generate Ticket</span>
+                                <span>→</span>
+                            </button>
+                        </div>
+
+                        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between h-full">
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Live Price Calculation</span>
+                                <div id="calc-price" class="text-4xl font-extrabold text-green-400 my-3">PHP 300.00</div>
+                                <div class="space-y-2 text-xs text-slate-400 border-t border-slate-900 pt-3">
+                                    <div class="flex justify-between">
+                                        <span>Base Service Fee:</span>
+                                        <span id="calc-base" class="text-slate-200">PHP 300.00</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Urgency Surcharge:</span>
+                                        <span id="calc-urgency" class="text-slate-200">PHP 0.00</span>
+                                    </div>
+                                    <div class="flex justify-between font-semibold text-slate-300 pt-1">
+                                        <span>Estimated Turnaround:</span>
+                                        <span id="calc-time" class="text-blue-400">Same Day (3-5 Hours)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-4 border-t border-slate-900">
+                                <div id="form-error" class="hidden text-xs text-red-400 bg-red-500/10 border border-red-500/20 p-3 rounded-lg text-center"></div>
+                                <p class="text-xs text-slate-500 text-center">
+                                    🔒 Direct submit saves ticket entry into Firebase Firestore and generates your Service Ticket immediately.
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        <div id="tab-ticket" class="hidden py-10">
+            <section class="max-w-3xl mx-auto px-4">
+                
+                <div id="ticket-empty" class="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center my-8">
+                    <div class="w-16 h-16 bg-slate-800 text-slate-500 rounded-2xl flex items-center justify-center font-bold text-2xl mx-auto mb-4">🎫</div>
+                    <h3 class="text-xl font-bold mb-2">No Active Service Ticket Found</h3>
+                    <p class="text-slate-400 text-sm max-w-md mx-auto mb-6">
+                        You have not submitted a service booking yet. Fill out the booking form to receive your printable service ticket.
+                    </p>
+                    <button onclick="switchTab('booking')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition">
+                        Go to Booking Form
+                    </button>
+                </div>
+
+                <div id="ticket-active" class="hidden space-y-6">
+                    <div class="flex justify-between items-center bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+                        <div>
+                            <span class="text-xs text-green-400 font-bold uppercase tracking-wider">✓ Booking Confirmed</span>
+                            <h3 class="text-base font-bold text-slate-100">Official TechFix Service Ticket</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl transition border border-slate-700 flex items-center gap-1.5">
+                                <span>🖨️ Print Ticket</span>
+                            </button>
+                            <button onclick="switchTab('booking')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition">
+                                + New Booking
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="printable-ticket" class="bg-slate-900 border-2 border-slate-800 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-500 to-green-500"></div>
+
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-800 pb-6 mb-6 gap-4">
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-2xl font-black bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">TechFix</span>
+                                    <span class="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full font-semibold border border-blue-500/30">CEC Campus IT</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-1">Cebu Eastern College, Inc. IT Department</p>
+                            </div>
+                            <div class="sm:text-right">
+                                <span class="text-xs text-slate-500 uppercase tracking-widest font-semibold">Ticket Reference Number</span>
+                                <div id="ticket-id" class="text-xl font-mono font-bold text-blue-400">#TF-2026-0000</div>
+                                <span id="ticket-db-status" class="text-[10px] px-2 py-0.5 rounded bg-green-500/10 text-green-400 border border-green-500/20 inline-block mt-1">Database Sync: Saved</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 text-sm mb-6">
+                            <div>
+                                <span class="text-xs text-slate-500 block uppercase font-semibold">Client Name</span>
+                                <span id="ticket-name" class="font-bold text-slate-200">Bernard Genobiagon</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-500 block uppercase font-semibold">Course / Department</span>
+                                <span id="ticket-course" class="font-bold text-slate-200">BSIT 2</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-500 block uppercase font-semibold">Contact Details</span>
+                                <span id="ticket-contact" class="font-bold text-slate-200">09123456789</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-500 block uppercase font-semibold">Selected Service</span>
+                                <span id="ticket-service-name" class="font-bold text-blue-400">Thermal Maintenance</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-500 block uppercase font-semibold">Urgency Schedule</span>
+                                <span id="ticket-urgency-name" class="font-bold text-slate-200">Standard Schedule</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-500 block uppercase font-semibold">Date & Time</span>
+                                <span id="ticket-timestamp" class="font-bold text-slate-200">Oct 24, 2026</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-2xl p-5 mb-6">
+                            <div class="flex justify-between text-xs text-slate-400 mb-1">
+                                <span>Service Fee Breakdown</span>
+                                <span>Amount</span>
+                            </div>
+                            <div class="flex justify-between text-sm py-1 border-b border-slate-900">
+                                <span id="breakdown-service-label" class="text-slate-300">Base Service Fee</span>
+                                <span id="breakdown-service-cost" class="font-semibold text-slate-200">PHP 300.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm py-1 border-b border-slate-900">
+                                <span id="breakdown-urgency-label" class="text-slate-300">Urgency Surcharge</span>
+                                <span id="breakdown-urgency-cost" class="font-semibold text-slate-200">PHP 0.00</span>
+                            </div>
+                            <div class="flex justify-between text-base font-bold pt-3 mt-1 text-green-400">
+                                <span>Total Investment</span>
+                                <span id="ticket-total">PHP 300.00</span>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-dashed border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                            <div>
+                                <span class="text-xs text-slate-500 font-semibold block uppercase">Pickup & Verification Note</span>
+                                <p class="text-xs text-slate-400 mt-0.5">Please present this digital or printed ticket.</p>
+                            </div>
+                            <div class="bg-slate-950 px-4 py-2 border border-slate-800 rounded-xl flex flex-col items-center">
+                                <div id="ticket-barcode" class="font-mono text-xs tracking-[0.3em] font-bold text-slate-400">||| | |||| | ||| || |||</div>
+                                <span class="text-[9px] text-slate-600 font-mono mt-0.5">VERIFIED CAMPUS TICKET</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-900 py-6 text-center text-xs text-slate-500 bg-slate-950">
+        <p>&copy; 2026 TechFix Student IT Solutions • College of Information Technology, Cebu Eastern College, Inc.</p>
+    </footer>
+
+    <script>
+        const firebaseConfig = {
+    apiKey: "AIzaSyEFYeK9BXB6Mn0Dg3g36_jbbSH9l0YhI",
+    authDomain: "techfix-b06a2.firebaseapp.com",
+    projectId: "techfix-b06a2",
+    storageBucket: "techfix-b06a2.firebasestorage.app",
+    messagingSenderId: "127582035538",
+    appId: "1:127582035538:web:6fc36d4a9404a14aa5c98b",
+    measurementId: "G-CHYG3K6WDS"
+};
+
+        let db = null;
+        try {
+            if (typeof firebase !== 'undefined') {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                db = firebase.firestore();
+            }
+        } catch (e) {
+            console.warn("Firebase initialized in offline mode");
+        }
+
+        function switchTab(tabName) {
+            document.getElementById('tab-home').classList.add('hidden');
+            document.getElementById('tab-booking').classList.add('hidden');
+            document.getElementById('tab-ticket').classList.add('hidden');
+
+            document.getElementById('nav-home').className = "px-3 py-2 rounded-lg transition text-slate-400 hover:text-slate-200";
+            document.getElementById('nav-booking').className = "px-3 py-2 rounded-lg transition text-slate-400 hover:text-slate-200";
+            document.getElementById('nav-ticket').className = "px-3 py-2 rounded-lg transition text-slate-400 hover:text-slate-200 flex items-center gap-1.5";
+
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const navBtn = document.getElementById(`nav-${tabName}`);
+            if (navBtn) {
+                navBtn.className = "px-3 py-2 rounded-lg transition text-blue-400 bg-slate-800 font-semibold";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function selectServiceAndBook(cost, serviceName) {
+            switchTab('booking');
+            const serviceSelect = document.getElementById('service-select');
+            for (let i = 0; i < serviceSelect.options.length; i++) {
+                if (serviceSelect.options[i].value === cost) {
+                    serviceSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const serviceSelect = document.getElementById('service-select');
+            const urgencySelect = document.getElementById('urgency-select');
+
+            const baseCost = parseFloat(serviceSelect.value) || 0;
+            const urgencyCost = parseFloat(urgencySelect.value) || 0;
+            const total = baseCost + urgencyCost;
+
+            document.getElementById('calc-base').innerText = `PHP ${baseCost.toFixed(2)}`;
+            document.getElementById('calc-urgency').innerText = `PHP ${urgencyCost.toFixed(2)}`;
+            document.getElementById('calc-price').innerText = `PHP ${total.toFixed(2)}`;
+
+            if (urgencyCost > 0) {
+                document.getElementById('calc-time').innerText = "Priority Emergency (1-2 Hours)";
+                document.getElementById('calc-time').className = "text-amber-400 font-semibold";
+            } else {
+                document.getElementById('calc-time').innerText = "Same Day (3-5 Hours)";
+                document.getElementById('calc-time').className = "text-blue-400 font-semibold";
+            }
+            return { baseCost, urgencyCost, total };
+        }
+
+        async function handleBookingSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('client-name').value.trim();
+            const course = document.getElementById('client-course').value.trim();
+            const contact = document.getElementById('client-contact').value.trim();
+            const errorBox = document.getElementById('form-error');
+
+            if (!name || !course || !contact) {
+                errorBox.innerText = "Please fill in all required fields.";
+                errorBox.classList.remove('hidden');
+                return;
+            }
+            errorBox.classList.add('hidden');
+
+            const serviceSelect = document.getElementById('service-select');
+            const urgencySelect = document.getElementById('urgency-select');
+
+            const serviceOption = serviceSelect.options[serviceSelect.selectedIndex];
+            const urgencyOption = urgencySelect.options[urgencySelect.selectedIndex];
+
+            const serviceName = serviceOption.getAttribute('data-name') || serviceOption.text;
+            const urgencyName = urgencyOption.getAttribute('data-name') || urgencyOption.text;
+
+            const totals = calculateTotal();
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const ticketId = `#TF-2026-${randomNum}`;
+            const timestampStr = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+
+            const bookingData = {
+                ticketId: ticketId,
+                clientName: name,
+                courseYear: course,
+                contactInfo: contact,
+                serviceName: serviceName,
+                serviceCost: totals.baseCost,
+                urgencyName: urgencyName,
+                urgencyFee: totals.urgencyCost,
+                totalPrice: totals.total,
+                status: "Pending Drop-off",
+                createdAt: new Date().toISOString()
+            };
+
+            let savedToFirebase = false;
+            if (db) {
+                try {
+                    await db.collection("bookings").add(bookingData);
+                    savedToFirebase = true;
+                } catch (e) {
+                    console.warn("Firestore save failed, generated locally:", e);
+                }
+            }
+
+            renderTicket(bookingData, timestampStr, savedToFirebase);
+
+            document.getElementById('ticket-badge').classList.remove('hidden');
+            document.getElementById('ticket-empty').classList.add('hidden');
+            document.getElementById('ticket-active').classList.remove('hidden');
+
+            switchTab('ticket');
+        }
+
+        function renderTicket(data, formattedTime, isSaved) {
+            document.getElementById('ticket-id').innerText = data.ticketId;
+            document.getElementById('ticket-name').innerText = data.clientName;
+            document.getElementById('ticket-course').innerText = data.courseYear;
+            document.getElementById('ticket-contact').innerText = data.contactInfo;
+            document.getElementById('ticket-service-name').innerText = data.serviceName;
+            document.getElementById('ticket-urgency-name').innerText = data.urgencyName;
+            document.getElementById('ticket-timestamp').innerText = formattedTime;
+
+            document.getElementById('breakdown-service-label').innerText = data.serviceName;
+            document.getElementById('breakdown-service-cost').innerText = `PHP ${data.serviceCost.toFixed(2)}`;
+            document.getElementById('breakdown-urgency-label').innerText = data.urgencyName;
+            document.getElementById('breakdown-urgency-cost').innerText = `PHP ${data.urgencyFee.toFixed(2)}`;
+            document.getElementById('ticket-total').innerText = `PHP ${data.totalPrice.toFixed(2)}`;
+
+            const barcodeText = `||| ${data.ticketId.replace('#', '')} |||| |||`;
+            document.getElementById('ticket-barcode').innerText = barcodeText;
+
+            const dbStatusEl = document.getElementById('ticket-db-status');
+            if (isSaved) {
+                dbStatusEl.innerText = "Database Sync: Saved to Firebase";
+                dbStatusEl.className = "text-[10px] px-2 py-0.5 rounded bg-green-500/10 text-green-400 border border-green-500/20 inline-block mt-1";
+            } else {
+                dbStatusEl.innerText = "Database Sync: Local Offline Ticket";
+                dbStatusEl.className = "text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 inline-block mt-1";
+            }
+        }
+    </script>
+</body>
+</html>
